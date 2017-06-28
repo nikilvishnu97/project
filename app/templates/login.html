@@ -1,0 +1,41 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+function set_username(username, pr)
+{
+    u = username.search('<username>')
+    if (u != -1) {
+        // username requires username
+        user = prompt('Enter your ' + pr + ' username:')
+        username = username.substr(0, u) + user
+    }
+    form = document.forms['login'];
+    form.elements['username'].value = username
+}
+</script>
+<h1>Sign In</h1>
+<form action="" method="post" name="login">
+    {{ form.hidden_tag() }}
+    <p>
+        Username:<br>
+        {{ form.username(size=28) }}
+        {% for error in form.username.errors %}
+          <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+        |{% for pr in providers %}
+          <a href="javascript:set_username('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
+        {% endfor %}
+    </p>
+    <p>
+	Password:<br>
+        {{ form.password(size=28) }}
+        {% for error in form.password.errors %}
+          <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	
+    <p>{{ form.remember_me }} Remember Me</p>
+    <p><input type="submit" value="Login"></p>    
+</form>
+{% endblock %}
